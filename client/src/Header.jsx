@@ -3,7 +3,7 @@ import logo from './assets/logo.png';
 
 export default function Header() {
     return(
-        <header className='flex items-center gap-5 p-4 justify-center bg-gray-200'>
+        <header className='flex items-center gap-5 p-4 justify-center'>
         {<img src={logo} className='object-contain w-14'/>}
         <Link className='font-bold text-xl' to='/'>ChessCoordinates</Link>
         <div className='flex gap-4 p-1 '>

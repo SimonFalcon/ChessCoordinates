@@ -7,6 +7,10 @@ import Layout from './Layout.jsx';
 import StatisticsPage from './pages/StatisticsPage.jsx';
 import PlayPage from './pages/PlayPage.jsx';
 import UserPage from './pages/UserPage.jsx';
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:4000";
+
 
 function App() {
 
