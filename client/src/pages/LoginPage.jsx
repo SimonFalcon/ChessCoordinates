@@ -1,4 +1,4 @@
-export default function IndexPage() {
+export default function LoginPage() {
 
 return "login"
 }
