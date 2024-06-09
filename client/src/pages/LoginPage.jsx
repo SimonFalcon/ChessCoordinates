@@ -12,6 +12,7 @@ export default function LoginPage()
         try {
             await axios.post('/login', {email, password});
             alert('Login successful');
+            
         } catch(e){
             alert('Login failed');
         }

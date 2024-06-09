@@ -9,20 +9,15 @@ const jwt = require('jsonwebtoken')
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'asfasffndyjtukilvbncvhdghfhht'
 
-var cors = require('cors')
+const cors = require('cors')
 
-app.use(express.json());
+app.use(cors({ origin: 'http://localhost:5173', methods: ["GET", "POST"], credentials: true }));
 
-
-app.use(cors({
-    credeintials: true,
-    origin: 'http://localhost:5173',
-}));
 
 
 mongoose.connect(process.env.MONGO_URL);
  
-
+app.use(express.json())
 
 app.get('/test', (req,res) =>{
     res.json('test ok');
