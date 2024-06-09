@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom';
 import logo from './assets/logo.png';
+import { UserContext } from './UserContext';
+import { useContext } from 'react';
 
 export default function Header() {
+    const {user} = useContext(UserContext);
     return(
         <header className='flex items-center gap-5 p-4 justify-center'>
         {<img src={logo} className='object-contain w-14'/>}
@@ -9,7 +12,13 @@ export default function Header() {
         <div className='flex gap-4 p-1 '>
           <Link className='hover:text-green-600 m-3 font-bold text-l'to={'/play'}>Play</Link>
           <Link className='hover:text-green-600 m-3 font-bold text-l'to={'/statistics'}>Statistics</Link>
-          <Link className='hover:text-green-600 m-3 font-bold text-l'to={'/user'}>User</Link>
+          <Link className='hover:text-green-600 m-3 font-bold text-l'to={'/user'}>
+          <div>
+          {!!user && (<div>
+            {user.name}
+          </div>)}
+          </div>
+          </Link>
         </div>
         <div>
           <Link className='hover:text-green-600 m-3 font-bold text-l 'to={'/login'}>Login</Link>
