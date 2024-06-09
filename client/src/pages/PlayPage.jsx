@@ -1,4 +1,10 @@
-export default function PlayPage() {
+import React from 'react';
+import ChessBoard from '../components/ChessBoard';
 
-    return "play"
-    }
+export default function PlayPage() {
+  return (
+    <div>
+      <ChessBoard />
+    </div>
+  );
+}

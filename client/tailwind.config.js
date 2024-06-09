@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         primary: '#16a44a',
+        chessBlue: '#327fa8',
       }
     },
   },

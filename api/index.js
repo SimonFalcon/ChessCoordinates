@@ -73,4 +73,36 @@ app.get('/profile', (req,res) =>{
     }
 })
 
+app.post('/correct-answer', async (req, res) => {
+    try {
+        const userId = req.body.userId; // Corrected from req.body._Id
+        // Find the user by ID
+        const user = await User.findById(userId); // Corrected from _id
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        user.correctAnswers++;
+        await user.save();
+        res.json(user); // Return updated user data if needed
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.post('/incorrect-answer', async (req, res) => {
+    try {
+        const userId = req.body.userId; // Corrected from req.body._Id
+        const user = await User.findById(userId); // Corrected from _id
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        user.incorrectAnswers++;
+        await user.save();
+        res.json(user); // Return updated user data if needed
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 app.listen(4000);
