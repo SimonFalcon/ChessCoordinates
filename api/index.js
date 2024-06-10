@@ -61,6 +61,11 @@ app.post('/login', async (req,res) => {
     }
   });
 
+app.post('/logout', (req,res) => {
+  res.cookie('token', '').json(true);
+});
+
+
 app.get('/profile', (req,res) => {
     mongoose.connect(process.env.MONGO_URL);
     const {token} = req.cookies;
