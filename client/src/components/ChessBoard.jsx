@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { UserContext } from "../UserContext";
+import axios from "axios";
 
 const ChessBoard = () => {
   const [randomCoordinate, setRandomCoordinate] = useState('');
@@ -6,6 +8,7 @@ const ChessBoard = () => {
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const resultsRef = useRef(null);
+
 
   useEffect(() => {
     setRandomCoordinate(getRandomCoordinate());
@@ -47,38 +50,29 @@ const ChessBoard = () => {
   };
 
 
-  const recordCorrectAnswer = async () => {
-    try {
-      // Make a POST request to the correct-answer endpoint with user ID
-      await axios.post('/correct-answer', { userId: user._id });
-      setCorrectCount(prevCount => prevCount + 1);
-    } catch (error) {
-      console.error('Error recording correct answer:', error);
-    }
-  };
-
-  const recordIncorrectAnswer = async () => {
-    try {
-      // Make a POST request to the incorrect-answer endpoint with user ID
-      await axios.post('/incorrect-answer', { userId: user._id });
-      setIncorrectCount(prevCount => prevCount + 1);
-    } catch (error) {
-      console.error('Error recording incorrect answer:', error);
-    }
-  };
-
   const handleSquareClick = (event) => {
     const clickedCoordinate = event.target.dataset.col + event.target.dataset.row;
     const correct = (clickedCoordinate === randomCoordinate);
     updateSquareColor(event.target, correct);
     addResultToList(randomCoordinate, correct);
     setRandomCoordinate(getRandomCoordinate());
-    if (correct) {
-      recordCorrectAnswer();
-    } else {
-      recordIncorrectAnswer();
+    recordAnswer(correct)
+  };
+
+
+  const recordAnswer = async (correct, userId) => {
+    try {
+      const endpoint = correct ? '/record-correct-answer' : '/record-incorrect-answer';
+      await axios.post(endpoint, { userId });
+      console.log(`${correct ? 'Correct' : 'Incorrect'} answer recorded successfully`);
+    } catch (error) {
+      console.error('Error recording answer:', error);
     }
   };
+  
+
+
+ 
 
 
   

@@ -13,7 +13,6 @@ const cookieParser = require('cookie-parser')
 app.use(cors({ origin: 'http://localhost:5173', methods: ["GET", "POST"], credentials: true }));
 
 
-
 mongoose.connect(process.env.MONGO_URL);
  
 app.use(express.json())
@@ -41,68 +40,94 @@ app.post('/register', async (req,res)=> {
 });
 
 app.post('/login', async (req,res) => {
+    mongoose.connect(process.env.MONGO_URL);
     const {email,password} = req.body;
-    const UserDoc = await User.findOne({email});
-    if (UserDoc) {
-        const passOk = bcrypt.compareSync(password, UserDoc.password)
-        if (passOk){
-            jwt.sign({email:UserDoc.email, id:UserDoc._id}, jwtSecret, {}, (err, token) => {
-                if (err) throw err;
-                res.cookie('token', token, { httpOnly: true, secure: false, sameSite: 'none' }).json (UserDoc);
-            });
-            
-        } else {
-            res.status(422).json ('pass not ok')
-        }
-    } else {
-        res.json('not found');
-    }
-});
-
-app.get('/profile', (req,res) =>{
-    const {token} = req.cookies;
-    if (token){
-        jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-            if(err) throw err;
-            const {name,email,_id} = await User.findById(userData.id);
-
-            res.json({name,email,_id});
+    const userDoc = await User.findOne({email});
+    if (userDoc) {
+      const passOk = bcrypt.compareSync(password, userDoc.password);
+      if (passOk) {
+        jwt.sign({
+          email:userDoc.email,
+          id:userDoc._id
+        }, jwtSecret, {}, (err,token) => {
+          if (err) throw err;
+          res.cookie('token', token).json(userDoc);
         });
-    }else{
-    res.json(null);
+      } else {
+        res.status(422).json('pass not ok');
+      }
+    } else {
+      res.json('not found');
     }
-})
+  });
 
-app.post('/correct-answer', async (req, res) => {
-    try {
-        const userId = req.body.userId; // Corrected from req.body._Id
-        // Find the user by ID
-        const user = await User.findById(userId); // Corrected from _id
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        user.correctAnswers++;
-        await user.save();
-        res.json(user); // Return updated user data if needed
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Internal server error" });
+app.get('/profile', (req,res) => {
+    mongoose.connect(process.env.MONGO_URL);
+    const {token} = req.cookies;
+    if (token) {
+      jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) throw err;
+        const {name,email,_id, correctAnswers, incorrectAnswers} = await User.findById(userData.id);
+        res.json({name,email,_id, correctAnswers, incorrectAnswers});
+      });
+    } else {
+      res.json(null);
     }
+  });
+
+app.post('/record-correct-answer', (req, res) => {
+    const { token } = req.cookies;
+    if (!token) {
+        return res.status(401).json({ error: "User not authenticated" });
+    }
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) {
+            return res.status(401).json({ error: "Invalid token" });
+        }
+
+        try {
+            const user = await User.findById(userData.id);
+            if (!user) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            user.correctAnswers += 1;
+            await user.save();
+
+            res.json({ message: "Correct answer recorded" });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
 });
 
-app.post('/incorrect-answer', async (req, res) => {
-    try {
-        const userId = req.body.userId; // Corrected from req.body._Id
-        const user = await User.findById(userId); // Corrected from _id
-        if (!user) {
-            return res.status(404).json({ error: "User not found" });
-        }
-        user.incorrectAnswers++;
-        await user.save();
-        res.json(user); // Return updated user data if needed
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Internal server error" });
+app.post('/record-incorrect-answer', (req, res) => {
+    const { token } = req.cookies;
+    if (!token) {
+        return res.status(401).json({ error: "User not authenticated" });
     }
+
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        if (err) {
+            return res.status(401).json({ error: "Invalid token" });
+        }
+
+        try {
+            const user = await User.findById(userData.id);
+            if (!user) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            user.incorrectAnswers += 1;
+            await user.save();
+
+            res.json({ message: "Incorrect answer recorded" });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: "Internal server error" });
+        }
+    });
 });
 app.listen(4000);

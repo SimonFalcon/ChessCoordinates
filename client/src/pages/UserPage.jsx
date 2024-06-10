@@ -14,6 +14,10 @@ export default function UserPage() {
     }
 
     return (
-        <div>{user?.name}</div>
+        <div>
+            <h1>Welcome, {user.name}</h1>
+            <p>Correct Answers: {user.correctAnswers}</p>
+            <p>Incorrect Answers: {user.incorrectAnswers}</p>
+        </div>
     );
 }
