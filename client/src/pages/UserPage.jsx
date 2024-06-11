@@ -13,22 +13,32 @@ export default function UserPage() {
     options: {
       chart: {
         type: 'heatmap',
+        height: 1,
       },
       plotOptions: {
         heatmap: {
           reverseNegativeShade: true,
           colorScale: {
             ranges: [
-              { from: -30, to: 0, name: '', color: '#FF0000' },
-              { from: 0, to: 0, name: '', color: '#FFFFFF'},
-              { from: 1, to: 5, name: '', color: '#FFB200' },
-              { from: 5, to: 50, name: '', color: '#00A100' },
+              { from: -30, to: -1, name: 'Need to practice', color: '#FF0000' },
+              { from: 0, to: 0, name: '0', color: '#FFFFFF' },
+              { from: 1, to: 5, name: 'Good', color: '#FFB200' },
+              { from: 6, to: 50, name: 'Master', color: '#00A100' },
             ],
           },
         },
       },
       dataLabels: {
         enabled: true,
+      },
+      xaxis: {
+        categories: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'],
+      },
+      yaxis: {
+        categories: [8, 7, 6, 5, 4, 3, 2, 1],
+      },
+      title: {
+        text: '',
       },
     },
   });
@@ -62,14 +72,14 @@ export default function UserPage() {
   const generateSeries = (data) => {
     const series = [];
     const files = 'ABCDEFGH';
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const fileData = [];
-      for (let rank = 1; rank <= 9; rank++) {
+    for (let rank = 1; rank <= 8; rank++) {
+      const rankData = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
         const key = file + rank;
-        fileData.push({ x: rank, y: data[key] || 0 });
+        rankData.push({ x: file, y: data[key] || 0 });
       }
-      series.push({ name: file, data: fileData });
+      series.push({ name: `${rank}`, data: rankData });
     }
     return series;
   };
