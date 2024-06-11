@@ -106,12 +106,13 @@ export default function UserPage() {
     <div className="text-center max-w-lg mx-auto">
       <div>
         Logged in as {user.name} ({user.email})<br />
-        <p>Correct Answers: {user.correctAnswers}</p>
-        <p>Incorrect Answers: {user.incorrectAnswers}</p>
+        
         <button onClick={logout} className="primary max-w-sm mt-2">Logout</button>
       </div>
       <div className="mt-4">
-        <h2>User Performance</h2>
+        <h2 className="text-lg p-3">User Performance</h2>
+        <p>Correct Answers: {user.correctAnswers}</p>
+        <p>Incorrect Answers: {user.incorrectAnswers}</p>
         {performanceData && Object.keys(performanceData).length > 0 ? (
           <ReactApexChart options={chartOptions.options} series={chartOptions.series} type="heatmap" height={350} />
         ) : (
