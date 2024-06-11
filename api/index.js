@@ -72,16 +72,18 @@ app.get('/profile', (req,res) => {
     if (token) {
       jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
-        const {name,email,_id, correctAnswers, incorrectAnswers} = await User.findById(userData.id);
-        res.json({name,email,_id, correctAnswers, incorrectAnswers});
+        const {name,email,_id, correctAnswers, incorrectAnswers, performance} = await User.findById(userData.id);
+        res.json({name,email,_id, correctAnswers, incorrectAnswers, performance});
       });
     } else {
       res.json(null);
     }
   });
 
-app.post('/record-correct-answer', (req, res) => {
+  app.post('/record-correct-answer', (req, res) => {
     const { token } = req.cookies;
+    const { coordinate } = req.body;
+
     if (!token) {
         return res.status(401).json({ error: "User not authenticated" });
     }
@@ -98,6 +100,7 @@ app.post('/record-correct-answer', (req, res) => {
             }
 
             user.correctAnswers += 1;
+            user.performance.set(coordinate, (user.performance.get(coordinate) || 0) + 1);
             await user.save();
 
             res.json({ message: "Correct answer recorded" });
@@ -110,6 +113,8 @@ app.post('/record-correct-answer', (req, res) => {
 
 app.post('/record-incorrect-answer', (req, res) => {
     const { token } = req.cookies;
+    const { coordinate } = req.body;
+
     if (!token) {
         return res.status(401).json({ error: "User not authenticated" });
     }
@@ -126,6 +131,7 @@ app.post('/record-incorrect-answer', (req, res) => {
             }
 
             user.incorrectAnswers += 1;
+            user.performance.set(coordinate, (user.performance.get(coordinate) || 0) - 1);
             await user.save();
 
             res.json({ message: "Incorrect answer recorded" });
