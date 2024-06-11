@@ -56,20 +56,19 @@ const ChessBoard = () => {
     updateSquareColor(event.target, correct);
     addResultToList(randomCoordinate, correct);
     setRandomCoordinate(getRandomCoordinate());
-    recordAnswer(correct)
-  };
+    recordAnswer(correct, randomCoordinate);
+};
 
 
-  const recordAnswer = async (correct, userId) => {
-    try {
-      const endpoint = correct ? '/record-correct-answer' : '/record-incorrect-answer';
-      await axios.post(endpoint, { userId });
-      console.log(`${correct ? 'Correct' : 'Incorrect'} answer recorded successfully`);
-    } catch (error) {
-      console.error('Error recording answer:', error);
-    }
-  };
-  
+const recordAnswer = async (correct, coordinate) => {
+  try {
+    const endpoint = correct ? '/record-correct-answer' : '/record-incorrect-answer';
+    await axios.post(endpoint, { coordinate });
+    console.log(`${correct ? 'Correct' : 'Incorrect'} answer recorded successfully`);
+  } catch (error) {
+    console.error('Error recording answer:', error);
+  }
+};
 
 
  
