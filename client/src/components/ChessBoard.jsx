@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import { UserContext } from "../UserContext";
+import React, { useState, useEffect, useRef } from 'react';
 import axios from "axios";
 
 const ChessBoard = () => {

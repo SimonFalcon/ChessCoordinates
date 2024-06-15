@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-// Function to create an initial performance map
 const createInitialPerformance = () => {
   const performance = new Map();
   const coordinates = [];
 
-  // Create coordinates from A1 to H8
   for (let i = 0; i < 8; i++) {
     for (let j = 1; j <= 8; j++) {
       const coord = String.fromCharCode(65 + i) + j; // A1, A2, ..., H8

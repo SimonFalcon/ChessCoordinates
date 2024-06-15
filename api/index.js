@@ -103,7 +103,6 @@ app.get('/profile', (req,res) => {
             user.performance.set(coordinate, (user.performance.get(coordinate) || 0) + 1);
             await user.save();
 
-            //res.json({ message: "Correct answer recorded" });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: "Internal server error" });
@@ -134,7 +133,6 @@ app.post('/record-incorrect-answer', (req, res) => {
             user.performance.set(coordinate, (user.performance.get(coordinate) || 0) - 1);
             await user.save();
 
-            //res.json({ message: "Incorrect answer recorded" });
         } catch (error) {
             console.error(error);
             res.status(500).json({ error: "Internal server error" });
