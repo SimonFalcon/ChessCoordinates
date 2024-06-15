@@ -1,5 +1,5 @@
 # ChessCoordinates
-### Video Demo: 
+### Video Demo: https://youtu.be/71KAbcFbuVc
 ### Description:
 
 This is my CS50 final project!
