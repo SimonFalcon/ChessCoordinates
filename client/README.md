@@ -61,14 +61,19 @@ Here you can create a user by typin the name, email and password:
 ![RegisterPage](/src/assets/RegisterPage.png)
 
 After registering and logging in you will be redirected to the play page where you can start your training:
-Here you will be prompted with a random coordinate and a chessboard. 
+Here you will be prompted with a random coordinate and see the chessboard. 
+The chess board is set up from the white side.
 You must press the right coordinate on the chess board to gain points. 
 If you answer correctly the square will light up green, if your guess is wrong the square will turn red.
-All of the answers are recorded in your user profile.
+The results of the session are recordered on the left side. Overal score for the session can be seen under the chessboard.
+The session resets after the page is reloaded.
+All of the answers are recorded in the user profile.
 ![PlayPage](/src/assets/PlayPage.png)
 
-Our final page of the app is the UserPage. On this page you can see the user you are logged in as. If you want you can log out.
+The final page of the app is the UserPage. On this page you can see the user you are logged in as. If you want you can log out.
 This page is also used as the statistics page. Here you can see your total correct and incorrect answers. 
 And the biggest feature on this app, the main reason I created it is the heatmap.
 The heatmap tracks the users overall performance for each chessboard square. So you can see how well you answer each square, where you need to improve.
+The lower the value in the heat map, the worse you are doing when answering that square, the bigger the value, the better you are doing.
 ![UserPage](/src/assets/UserPage.png)
+
